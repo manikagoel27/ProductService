@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DEPLOY_DIR = 'C:\\path\\to\\deployment'  // Adjust the deployment directory
+        DEPLOY_DIR = '\\path\\to\\deployment'  // Adjust the deployment directory
         JAR_NAME = 'ProductService.jar'
     }
 
