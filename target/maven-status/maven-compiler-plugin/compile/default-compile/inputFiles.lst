@@ -1,2 +1,6 @@
-C:\git\AssignmentMicroServiceAdvanced\AdminService\src\main\java\org\example\Controller\AdminController.java
-C:\git\AssignmentMicroServiceAdvanced\AdminService\src\main\java\org\example\AdminServiceApplication.java
+C:\git\AdvanceMicroService-Git\ProductService\src\main\java\org\example\Entity\Product.java
+C:\git\AdvanceMicroService-Git\ProductService\src\main\java\org\example\ProductServiceApplication.java
+C:\git\AdvanceMicroService-Git\ProductService\src\main\java\org\example\Client\InventoryServiceClient.java
+C:\git\AdvanceMicroService-Git\ProductService\src\main\java\org\example\Client\ProductDetailsServiceClient.java
+C:\git\AdvanceMicroService-Git\ProductService\src\main\java\org\example\Entity\ProductResponse.java
+C:\git\AdvanceMicroService-Git\ProductService\src\main\java\org\example\Controller\ProductController.java

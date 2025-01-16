@@ -1,0 +1,8 @@
+org\example\Controller\ProductController.class
+org\example\Entity\Product$ProductBuilder.class
+org\example\Entity\Product.class
+org\example\Entity\ProductResponse$ProductResponseBuilder.class
+org\example\Entity\ProductResponse.class
+org\example\Client\InventoryServiceClient.class
+org\example\Client\ProductDetailsServiceClient.class
+org\example\ProductServiceApplication.class
