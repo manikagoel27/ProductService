@@ -8,17 +8,17 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn clean package'
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
         stage('Deploy') {
             steps {
-                sh """
+                bat """
                 cp target/ProductService.jar /path/to/deployment/
                 nohup java -jar /path/to/deployment/ProductService.jar &
                 """
