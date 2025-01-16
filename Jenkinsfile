@@ -36,7 +36,7 @@ pipeline {
 
                 // Copy the JAR file to the deployment directory
                 bat """
-                copy target\\%JAR_NAME% %DEPLOY_DIR%
+                copy "target\\%JAR_NAME%" "%DEPLOY_DIR%"
                 if %errorlevel% neq 0 exit /b 1
                 """
 
