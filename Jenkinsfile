@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DEPLOY_DIR = '\\path\\to\\deployment'  // Adjust the deployment directory
+        DEPLOY_DIR = "${WORKSPACE}\\deployment"  // Deployment directory relative to Jenkins workspace
         JAR_NAME = 'ProductService.jar'
     }
 
