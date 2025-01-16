@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DEPLOY_DIR = "${WORKSPACE}\\deployment"  // Deployment directory relative to Jenkins workspace
-        JAR_NAME = 'ProductService.jar'
+        JAR_NAME = 'ProductService-1.0-SNAPSHOT.jar'
     }
 
     stages {
