@@ -30,6 +30,7 @@ public class ProductController {
             ResponseEntity<List<Product>> allProducts = productServiceClient.getAllProducts();
             List<ProductResponse> productDetailsList = new ArrayList<>();
             List<Product> productsList = allProducts.getBody();
+            
             if(productsList.size() > 0) {
                 for (Product product: productsList){
                     ProductResponse.ProductResponseBuilder productDetailsBuilder= ProductResponse.builder().id(product.getId())
