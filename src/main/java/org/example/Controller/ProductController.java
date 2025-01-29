@@ -1,7 +1,9 @@
 package org.example.Controller;
 
+import feign.FeignException;
 import org.example.Client.InventoryServiceClient;
 import org.example.Client.ProductDetailsServiceClient;
+import org.example.Entity.InventoryRequest;
 import org.example.Entity.Product;
 import org.example.Entity.ProductResponse;
 import org.springframework.http.HttpStatus;
@@ -24,43 +26,59 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
-        ResponseEntity<List<Product>> allProducts = productServiceClient.getAllProducts();
-        List<ProductResponse> productDetailsList = new ArrayList<>();
-        List<Product> productsList = allProducts.getBody();
-        if(productsList.size() > 0) {
-            for (Product product: productsList){
-                ProductResponse.ProductResponseBuilder productDetailsBuilder= ProductResponse.builder().id(product.getId())
-                        .name(product.getName())
-                        .design(product.getDesign())
-                        .size(product.getSize())
-                        .price(product.getPrice());
-                ResponseEntity<Integer> stock = inventoryServiceClient.getStock(product.getId());
-                if(stock.getStatusCode() == HttpStatus.OK) {
-                    productDetailsBuilder.count(stock.getBody());
-                    productDetailsList.add(productDetailsBuilder.build());
+        try{
+            ResponseEntity<List<Product>> allProducts = productServiceClient.getAllProducts();
+            List<ProductResponse> productDetailsList = new ArrayList<>();
+            List<Product> productsList = allProducts.getBody();
+            if(productsList.size() > 0) {
+                for (Product product: productsList){
+                    ProductResponse.ProductResponseBuilder productDetailsBuilder= ProductResponse.builder().id(product.getId())
+                            .name(product.getName())
+                            .design(product.getDesign())
+                            .size(product.getSize())
+                            .price(product.getPrice());
+                    ResponseEntity<Integer> stock = inventoryServiceClient.getStock(product.getId());
+                    if(stock.getStatusCode() == HttpStatus.OK) {
+                        productDetailsBuilder.count(stock.getBody());
+                        productDetailsList.add(productDetailsBuilder.build());
+                    }
                 }
             }
+            return ResponseEntity.ok(new ArrayList<>(productDetailsList));
+
+        } catch (FeignException ex){
+            return ResponseEntity.badRequest().body(new ArrayList<>());
         }
-        return ResponseEntity.ok(new ArrayList<>(productDetailsList));
     }
 
     @PostMapping
     public ResponseEntity<String> addProduct(@RequestBody ProductResponse productDetails) {
-        Product product = Product.builder().id(productDetails.getId())
-                .name(productDetails.getName())
-                .size(productDetails.getSize())
-                .design(productDetails.getDesign())
-                .price(productDetails.getPrice())
-                .build();
-        productServiceClient.addProduct(product);
-        inventoryServiceClient.updateStock(productDetails.getId(), productDetails.getCount());
-        return ResponseEntity.ok("Product added successfully");
+
+        try {
+            Product product = Product.builder().id(productDetails.getId())
+                    .name(productDetails.getName())
+                    .size(productDetails.getSize())
+                    .design(productDetails.getDesign())
+                    .price(productDetails.getPrice())
+                    .build();
+            productServiceClient.addProduct(product);
+            inventoryServiceClient.addStock(InventoryRequest.builder()
+                    .productId(productDetails.getId())
+                    .quantity(productDetails.getCount()).build());
+            return ResponseEntity.ok("Product added successfully");
+        } catch (FeignException ex){
+            return ResponseEntity.badRequest().body("Downstream Service Failed with Exception" + ex.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> removeProduct(@PathVariable String id) {
-        productServiceClient.removeProduct(id);
-        inventoryServiceClient.removeProduct(id);
-        return ResponseEntity.ok("Product removed successfully");
+        try {
+            productServiceClient.removeProduct(id);
+            inventoryServiceClient.removeProduct(id);
+            return ResponseEntity.ok("Product removed successfully");
+        } catch (FeignException ex) {
+            return ResponseEntity.badRequest().body("Downstream Service Failed with Exception" + ex.getMessage());
+        }
     }
 }

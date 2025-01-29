@@ -9,12 +9,12 @@ import java.util.List;
 
 @FeignClient(name = "PRODUCT-DETAILS-SERVICE")
 public interface ProductDetailsServiceClient {
-    @PostMapping("/product")
+    @PostMapping("/productdetails")
     void addProduct(@RequestBody Product product);
 
-    @DeleteMapping("/product/{id}")
+    @DeleteMapping("/productdetails/{id}")
     void removeProduct(@PathVariable String id);
 
-    @GetMapping("/product")
+    @GetMapping("/productdetails")
     ResponseEntity<List<Product>> getAllProducts();
 }
